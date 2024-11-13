@@ -1,0 +1,12 @@
+# Ignorar archivos de Python compilados
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignorar archivos y directorios de entornos virtuales
+venv/
+env/
+env_test/
+
+# ignorar archivos de configuracion json para entrono virtual
+*.json
