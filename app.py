@@ -30,7 +30,7 @@ def hello():
 #        else:
 #            return jsonify({'error':'Bad request'}),400
 #    except Exception:
-#        return jsonify({'error': 'Error en el servicio'}), 503
+#        return jsonify({'error': 'Error en el servicio'}), 500
 
 @app.route("/api/sudoku/generate", methods=["GET"])
 @app.route("/api/sudoku/generate/", methods=["GET"])
@@ -54,7 +54,7 @@ def get_sudoku():
             puzzle = sudoku.limpiarCeldas(tablero, '1')
             return jsonify({'solucion':tablero.tolist(),'puzzle':puzzle.tolist()}),200
     except Exception:
-        return jsonify({'error': 'Error en el servicio'}), 503
+        return jsonify({'error': 'Error en el servicio'}), 500
 
 @app.route('/api/sudoku/solve', methods=['POST'])
 def solve_sudoku():
@@ -81,26 +81,36 @@ def solve_sudoku():
         else:
             return jsonify({'error':'JSON vacío'}),400
     except Exception:
-        return jsonify({'error':'Error en el servicio'}),503
+        return jsonify({'error':'Error en el servicio'}),500
     
 
 @app.route('/api/sudoku/validate', methods=['POST'])
 def validate_sudoku():
     try:
-        data = request.get_json()
+        try:
+            data = request.get_json()
+        except Exception:
+            return jsonify({'error': 'JSON no válido'}), 400
         if data:
-            arreglo = np.array(data['sudoku'], dtype=np.float64)
+            try:
+                arreglo = np.array(data['sudoku'], dtype=np.float64)
+            except Exception:
+                return jsonify({'error': 'Tablero sudoku no válido',
+                                'more details':'Una o más filas del sudoku contiene una cantidad de elementos diferente a 9'}), 404
+
             if arreglo.shape != (9,9):
-                return jsonify({'invalid':'Bad Request'}),400
+                return jsonify({'error':'Tablero sudoku no válido',
+                                'more details':'Las dimensiones del sudoku no coinciden con una matriz 9x9'}),400
+                        
 
             if sudoku.validarSolucion(arreglo):
                 return jsonify({'valid':"True"}),200
             else:
                 return jsonify({'valid':"False"}),200
         else:
-            return jsonify({'error':'datos de entrada incorrectos'}),400
+            return jsonify({'error':'JSON vacío'}),400
     except Exception:
-        return jsonify({'error':'Error en el servicio'}),503
+        return jsonify({'error':'Error en el servicio'}),500
 
 
 if __name__ == "__main__":

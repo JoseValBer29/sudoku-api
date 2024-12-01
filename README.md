@@ -14,7 +14,7 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
 - **Parámetros:** 
   - `difficulty`: (opcional) Establece la dificultad del tablero. Valores posibles: `0`(fácil), `1`(medio), `2`(difícil). Si no se especifica, se genera un tablero de dificultad media.
   
-- **Respuesta:**
+- **Respuesta Exitosa:**
   - **Código:** 200 OK
   - **Cuerpo de la respuesta:**
     ```json
@@ -33,6 +33,16 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
       
     }
     ```
+
+- **Respuesta de Error:**
+  - **Código:** 500 Internal Server Error
+  - **Cuerpo de la respuesta:**
+    ```json
+    {
+      "error": "Error en el servicio"
+    }
+    ```
+
 ### 2. **Resolver un Sudoku**
 
 - **Método:** `POST`
@@ -105,7 +115,7 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
       "error": "JSON vacío"
     }
     ```
-  - **Código:** 503 Bad Request
+  - **Código:** 500 Internal Server Error
   - **Cuerpo de la respuesta:**
   ```json
     {
@@ -155,6 +165,43 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
       "valid": "False"
     }
     ```
+
+- **Respuestas de Error:**
+  - **Código:** 400 Bad Request
+  - **Cuerpo de la respuesta:**
+    ```json
+    {
+      "error": "JSON no válido"
+    }
+    ```
+    O
+    ```json
+    {
+      "error":"Tablero sudoku no válido",
+      "more details":"Una o más filas del sudoku contiene una cantidad de elementos diferente a 9"
+    }
+    ```
+    O
+    ```json
+    {
+      "error":"Tablero sudoku no válido",
+      "more details":"Las dimensiones del sudoku no coinciden con una matriz 9x9"
+    }
+    ```
+    O
+    ```json
+    {
+      "error": "JSON vacío"
+    }
+    ```
+  - **Código:** 500 Internal Server Error
+  - **Cuerpo de la respuesta:**
+  ```json
+    {
+      "error": "Error en el servicio"
+    }
+    ```
+
 ## Requisitos
 
 - Python 3.12
