@@ -185,14 +185,14 @@ class Sudoku():
         for fila in range(9):
             for columna in range(9):
                 if tablero_temp[fila, columna] == 0:
-                    found_valid_value = False
                     for elemento in range(1, 10):
                         if self.validarElemento(tablero_temp, fila, columna, elemento):
                             tablero_temp[fila, columna] = elemento
                             if self.validarUnicidad(tablero_temp, soluciones):
-                                return True  # Si la llamada recursiva es exitosa, continuamos
-                            else:
                                 tablero_temp[fila, columna] = 0
+                                continue  # Si la llamada recursiva es exitosa, continuamos
+                            
+                            tablero_temp[fila, columna] = 0
                     return False  # Si no se encuentra ningún valor válido, retorna False
 
         soluciones[0] += 1
