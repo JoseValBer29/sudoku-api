@@ -36,9 +36,9 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
 ### 2. **Resolver un Sudoku**
 
 - **Método:** `POST`
-- **Endpoint:** `/api/sudoku/validate`
+- **Endpoint:** `/api/sudoku/solve`
 - **Descripción:** Resuelve un tablero de Sudoku proporcionado por el usuario.
-- **Parámetros:**
+- **Body:**
   - `board`: Una matriz 9x9 que representa el tablero de Sudoku que el usuario desea resolver.
   
 - **Cuerpo de la solicitud:**
@@ -58,7 +58,7 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
     }
     ```
 
-- **Respuesta:**
+- **Respuesta Exitosa:**
   - **Código:** 200 OK
   - **Cuerpo de la respuesta:**
     ```json
@@ -76,6 +76,43 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
       ]
     }
     ```
+
+- **Respuestas de Error:**
+  - **Código:** 400 Bad Request
+  - **Cuerpo de la respuesta:**
+    ```json
+    {
+      "error": "JSON no válido"
+    }
+    ```
+    O
+    ```json
+    {
+      "error":"Tablero sudoku no válido",
+      "more details":"Una o más filas del sudoku contiene una cantidad de elementos diferente a 9"
+    }
+    ```
+    O
+    ```json
+    {
+      "error":"Tablero sudoku no válido",
+      "more details":"Las dimensiones del sudoku no coinciden con una matriz 9x9"
+    }
+    ```
+    O
+    ```json
+    {
+      "error": "JSON vacío"
+    }
+    ```
+  - **Código:** 503 Bad Request
+  - **Cuerpo de la respuesta:**
+  ```json
+    {
+      "error": "Error en el servicio"
+    }
+    ```
+
 ### 3. **Validar una solución de Sudoku**
 
 - **Método:** `POST`
@@ -107,7 +144,7 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
   - **Cuerpo de la respuesta:**
     ```json
     {
-      "valid": true
+      "valid": "True"
     }
     ```
   - Si el sudoku está mal resuelto
@@ -115,7 +152,7 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
   - **Cuerpo de la respuesta:**
     ```json
     {
-      "valid": true
+      "valid": "False"
     }
     ```
 ## Requisitos
