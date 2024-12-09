@@ -72,12 +72,12 @@ def solve_sudoku():
 
             if arreglo.shape != (9,9):
                 return jsonify({'error':'Tablero sudoku no válido',
-                                'more details':'Las dimensiones del sudoku no coinciden con una matriz 9x9'}),400
-                        
-            tablero = sudoku.resolverSudoku(arreglo)
+                                'more details':'Las dimensiones del sudoku no coinciden con una matriz 9x9'}),400           
+            tablero,unicidad = sudoku.resolverSudoku(arreglo)
             if tablero is None:
                 return jsonify({'solucion':'El tablero no tiene solucion'}),200
-            return jsonify({'solucion':tablero.tolist()}),200
+            return jsonify({'Solución única':unicidad,
+                            'solucion':tablero.tolist()}),200
         else:
             return jsonify({'error':'JSON vacío'}),400
     except Exception:

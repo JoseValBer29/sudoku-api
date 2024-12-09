@@ -155,48 +155,40 @@ class Sudoku():
 
         return tablero_temp
     
-    def validarUnicidad(self,tablero,soluciones):
+    def validarUnicidad(self, tablero, soluciones):
         """
-        Checks if the Sudoku board has a unique solution.
+        Validates if a Sudoku puzzle has a unique solution.
 
-        This method uses a recursive approach to solve the Sudoku board. It attempts
-        to place numbers from 1 to 9 in each empty cell (represented by a 0) and
-        counts the number of possible solutions using the attribute `self.soluciones`.
-        The function terminates if more than one solution is found, indicating that
-        the Sudoku board does not have a unique solution.
+        This function uses a backtracking algorithm to check if a given Sudoku puzzle
+        has a unique solution. It recursively fills in empty cells with valid numbers
+        and checks if there are multiple solutions.
 
         Parameters:
-        ----------
-        tablero : numpy.ndarray
-            A 9x9 matrix representing the Sudoku board. Empty cells are represented
-            by zeros (0).
+        - tablero (numpy.ndarray): A 9x9 numpy array representing the Sudoku grid.
+                                  Each cell contains a number from 1 to 9, or 0 if the cell is empty.
+        - soluciones (list): A list containing the number of solutions found. It is initially set to [0].
 
         Returns:
-        -------
-        bool
-            Returns `True` if a unique solution for the board has been found. Returns
-            `False` if more than one solution is found, or if the board cannot be
-            completely solved.
+        bool: True if the Sudoku puzzle has a unique solution, False otherwise.
+              The function modifies the 'soluciones' list in-place.
         """
         if soluciones[0] > 1:
-            return False
+            return False  # Detenemos la búsqueda si ya hay más de una solución
 
-        tablero_temp = tablero.copy()
         for fila in range(9):
             for columna in range(9):
-                if tablero_temp[fila, columna] == 0:
-                    for elemento in range(1, 10):
-                        if self.validarElemento(tablero_temp, fila, columna, elemento):
-                            tablero_temp[fila, columna] = elemento
-                            if self.validarUnicidad(tablero_temp, soluciones):
-                                tablero_temp[fila, columna] = 0
-                                continue  # Si la llamada recursiva es exitosa, continuamos
-                            
-                            tablero_temp[fila, columna] = 0
-                    return False  # Si no se encuentra ningún valor válido, retorna False
+                if tablero[fila][columna] == 0:  # Encontramos una celda vacía
+                    for elemento in range(1, 10):  # Probar valores del 1 al 9
+                        if self.validarElemento(tablero, fila, columna, elemento):
+                            tablero[fila][columna] = elemento
+                            if not self.validarUnicidad(tablero, soluciones):
+                                return False  # Más de una solución encontrada
+                            tablero[fila][columna] = 0  # Restaurar el estado del tablero
+                    return True  # Continuar la búsqueda si no se llenó la celda
+        soluciones[0] += 1  # Incrementar el contador de soluciones cuando se complete el tablero
+        return soluciones[0] <= 1  # Retornar True si aún es único
 
-        soluciones[0] += 1
-        return True  # Solución unica encontrada
+  # Solución unica encontrada
     
     def validarSolucion(self, tablero):
         """
@@ -226,8 +218,9 @@ class Sudoku():
         return True
     
     def resolverSudoku(self,tablero):
+        unico = self.validarUnicidad(tablero,soluciones=[0])
         if self.rellenar(tablero,list(range(1,10)),False):
-            return tablero
+            return tablero,unico
         else:
             return None
 
