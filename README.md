@@ -73,6 +73,7 @@ Esta API proporciona funcionalidades relacionadas con el juego de Sudoku, incluy
   - **Cuerpo de la respuesta:**
     ```json
     {
+      "Solución única" : true/false,
       "solucion": [
         [1, 3, 9, 5, 4, 7, 2, 8, 6],
         [4, 8, 6, 3, 9, 2, 7, 1, 5],
