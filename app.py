@@ -1,5 +1,6 @@
 from flask import Flask,jsonify,request
 from sudokuGame.Sudoku import Sudoku
+import os
 import numpy as np
 
 app = Flask(__name__)
@@ -114,4 +115,5 @@ def validate_sudoku():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Usa el puerto definido por Render o 5000 como predeterminado
+    app.run(host="0.0.0.0", port=port)
