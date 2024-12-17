@@ -139,18 +139,22 @@ class Sudoku():
         tablero_temp = tablero.copy()
         eliminadas = 0
 
-        for row, col in zip(rows, cols):
-            if eliminadas >= celdas_nivel[nivel]:
-                break  # Limitar el número de eliminaciones según el nivel
-            
-            valor_actual = tablero_temp[row, col]
-            tablero_temp[row, col] = 0
-            soluciones = [0]  # Lista para hacer el contador mutable
-            
-            if self.validarUnicidad(tablero_temp, soluciones):  # Si hay una única solución
-                eliminadas += 1
-            else:
-                tablero_temp[row, col] = valor_actual  # Restaurar si no es única
+        while eliminadas < celdas_nivel[nivel]:
+
+
+            for row, col in zip(rows, cols):
+                if eliminadas >= celdas_nivel[nivel]:
+                    break  # Limitar el número de eliminaciones según el nivel
+                
+                valor_actual = tablero_temp[row, col]
+                tablero_temp[row, col] = 0
+                soluciones = [0]  # Lista para hacer el contador mutable
+                
+                if not self.validarUnicidad(tablero_temp, soluciones):  # Si hay una única solución
+                    tablero_temp[row, col] = valor_actual
+    
+                eliminadas = np.sum(tablero_temp == 0)
+                      # Restaurar si no es única
         
 
         return tablero_temp
