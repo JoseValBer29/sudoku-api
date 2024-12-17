@@ -2,8 +2,10 @@ from flask import Flask,jsonify,request
 from sudokuGame.Sudoku import Sudoku
 import os
 import numpy as np
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 sudoku = Sudoku()
 
